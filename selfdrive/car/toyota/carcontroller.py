@@ -5,7 +5,7 @@ from selfdrive.car import apply_toyota_steer_torque_limits, create_gas_intercept
 from selfdrive.car.toyota.toyotacan import create_steer_command, create_ui_command, create_ui_command_off,\
                                            create_accel_command, create_acc_cancel_command, \
                                            create_fcw_command, create_lta_steer_command, \
-                                           create_ui_command_disable_startup_lkas
+                                           create_ui_command_disable_startup_lkas, create_brakehold_command
 from selfdrive.car.toyota.values import CAR, STATIC_DSU_MSGS, NO_STOP_TIMER_CAR, TSS2_CAR, \
                                         MIN_ACC_SPEED, PEDAL_TRANSITION, CarControllerParams, FEATURES
 from selfdrive.car.toyota.interface import CarInterface
@@ -111,6 +111,12 @@ class CarController():
     can_sends.append(create_steer_command(self.packer, apply_steer, apply_steer_req, frame))
     if frame % 2 == 0 and CS.CP.carFingerprint in TSS2_CAR:
       can_sends.append(create_lta_steer_command(self.packer, 0, 0, frame // 2))
+      # AleSato's Automatic Brake Hold
+      if CS.brakehold_governor:
+        can_sends.append(create_brakehold_command(self.packer, {}, True if frame % 730 < 727 else False))
+      else:
+        can_sends.append(create_brakehold_command(self.packer, CS.stock_aeb, False))
+    
 
     # LTA mode. Set ret.steerControlType = car.CarParams.SteerControlType.angle and whitelist 0x191 in the panda
     # if frame % 2 == 0:
