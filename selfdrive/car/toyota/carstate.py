@@ -1,3 +1,4 @@
+import copy
 from cereal import car
 from common.numpy_fast import mean
 from common.filter_simple import FirstOrderFilter
@@ -63,6 +64,17 @@ class CarState(CarStateBase):
 
     # KRKeegan - Add support for toyota distance button
     self.gap_adjust_cruise_tr = 0
+
+    # AleSato's automatic brakehold
+    self.time_to_brakehold = 100 * 3   # 3 seconds stopped to activate
+    self.GearShifter = car.CarState.GearShifter # avoid Rear and Park gears
+    self.stock_aeb = {}
+    self.brakehold_condition_satisfied = False
+    self.brakehold_condition_counter = 0
+    self.reset_brakehold = False    
+    self.prev_brakePressed = True
+    self.brakehold_governor = False
+
 
   def update(self, cp, cp_cam):
     ret = car.CarState.new_message()
@@ -296,6 +308,26 @@ class CarState(CarStateBase):
       ret.rightBlindspot = (cp.vl["BSM"]["R_ADJACENT"] == 1) or (cp.vl["BSM"]["R_APPROACHING"] == 1)
 
     self.count = self.count + 1
+
+    # AleSato's Automatic BrakeHold
+    self.stock_aeb = copy.copy(cp_cam.vl["PRE_COLLISION_2"])
+    self.brakehold_condition_satisfied =  (ret.standstill and ret.cruiseState.available and not ret.gasPressed and \
+                                          not ret.cruiseState.enabled and not (ret.gearShifter in (self.GearShifter.reverse,\
+                                          self.GearShifter.park)) and Params().get_bool('AleSato_AutomaticBrakeHold'))
+    if self.brakehold_condition_satisfied:
+      if self.brakehold_condition_counter > self.time_to_brakehold and not self.reset_brakehold:
+        self.brakehold_governor = True
+      else:
+        self.brakehold_governor = False
+      if not self.prev_brakePressed and ret.brakePressed: # disable automatic brakehold in second brakePress
+        self.reset_brakehold = True
+      self.brakehold_condition_counter += 1
+    else:
+      self.brakehold_governor = False
+      self.reset_brakehold = False
+      self.brakehold_condition_counter = 0  
+    self.prev_brakePressed = ret.brakePressed
+
     return ret
 
   @staticmethod
@@ -410,5 +442,29 @@ class CarState(CarStateBase):
 
       # KRKeegan - Add support for toyota distance button
       signals.append(("DISTANCE", "ACC_CONTROL", 0))
+
+      # AleSato Automatic BrakeHold
+      signals += [
+        ("DSS1GDRV", "PRE_COLLISION_2", 0),
+        ("DS1STAT2", "PRE_COLLISION_2", 0),
+        ("DS1STBK2", "PRE_COLLISION_2", 0),
+        ("PCSWAR", "PRE_COLLISION_2", 0),
+        ("PCSALM", "PRE_COLLISION_2", 0),
+        ("PCSOPR", "PRE_COLLISION_2", 0),
+        ("PCSABK", "PRE_COLLISION_2", 0),
+        ("PBATRGR", "PRE_COLLISION_2", 0),
+        ("PPTRGR", "PRE_COLLISION_2", 0),
+        ("IBTRGR", "PRE_COLLISION_2", 0),
+        ("CLEXTRGR", "PRE_COLLISION_2", 0),
+        ("IRLT_REQ", "PRE_COLLISION_2", 0),
+        ("BRKHLD", "PRE_COLLISION_2", 0),
+        ("AVSTRGR", "PRE_COLLISION_2", 0),
+        ("VGRSTRGR", "PRE_COLLISION_2", 0),
+        ("PREFILL", "PRE_COLLISION_2", 0),
+        ("PBRTRGR", "PRE_COLLISION_2", 0),
+        ("PCSDIS", "PRE_COLLISION_2", 0),
+        ("PBPREPMP", "PRE_COLLISION_2", 0),
+      ]
+      checks.append(("PRE_COLLISION_2", 33))
 
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2, enforce_checks=False)
