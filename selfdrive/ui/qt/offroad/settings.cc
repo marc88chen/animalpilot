@@ -504,6 +504,12 @@ SunnypilotPanel::SunnypilotPanel(QWidget* parent) : QWidget(parent) {
                                   "../assets/offroad/icon_speed_limit.png",
                                   this));
 
+  toggles.append(new ParamControl("AleSato_AutomaticBrakeHold",
+                                  "Automatic Brake Hold",
+                                  "Activates the car's brakes after 3 seconds stopped (requires actived cruise main).",
+                                  "../assets/offroad/brakehold.png",
+                                  this));                                
+
   toggles.append(new ParamControl("QuietDrive",
                                   "Quiet Drive 🤫",
                                   "openpilot will display alerts but only play the most important warning sounds. This feature can be toggled while the car is on.",

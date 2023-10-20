@@ -1,3 +1,7 @@
+AnimalPilot - Version 0.8.12-4 (2023-10-20)
+========================
+* NEW❗: Autohold for car's without electronic parking brake
+
 AnimalPilot - Version 0.8.12-4 (2022-08-06)
 ========================
 * FIXED: no more chime and reset setSpeed when braking at standStill

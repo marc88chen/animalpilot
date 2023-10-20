@@ -139,6 +139,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     modelLagWarningDEPRECATED @93;
     startupOneplusDEPRECATED @82;
     startupFuzzyFingerprintDEPRECATED @97;
+    automaticBrakehold @119;
   }
 }
 
@@ -388,6 +389,9 @@ struct CarControl {
       prompt @6;
       promptRepeat @7;
       promptDistracted @8;
+
+      # AleSato's automatic brakehold
+      engageBrakehold @9;
     }
   }
 

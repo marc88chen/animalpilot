@@ -929,4 +929,11 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
     ET.NO_ENTRY: NoEntryAlert("Falha de Cruzeiro: Reinicie o carro"),
   },
 
+  EventName.automaticBrakehold: {
+    ET.PERMANENT: Alert(
+      "Automatic Brake Hold Active",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOWEST, VisualAlert.none, AudibleAlert.engageBrakehold, .1,),
+  },  
 }
