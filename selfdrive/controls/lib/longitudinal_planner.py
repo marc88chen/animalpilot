@@ -18,12 +18,19 @@ from selfdrive.controls.lib.events import Events
 from selfdrive.swaglog import cloudlog
 
 LON_MPC_STEP = 0.2  # first step is 0.2s
-AWARENESS_DECEL = -0.2  # car smoothly decel at .2m/s^2 when user is distracted
+#AWARENESS_DECEL = -0.2  # car smoothly decel at .2m/s^2 when user is distracted
+AWARENESS_DECEL =  [-0.01, -0.0002, -0.0001,  -0.14, -0.28, -0.30, -0.25, -0.20]
+AWARENESS_DECEL_BP = [0.,    0.01,    0.03,    8.33,  12,    20.,   30.,   55.]
 A_CRUISE_MIN = -1.2
-A_CRUISE_MAX_VALS = [1.2, 1.2, 0.8, 0.6]  # Sets the limits of the planner accel, PID may exceed
-A_CRUISE_MAX_VALS_FOLLOWING = [1.6, 1.2, 0.8, 0.6]  # Allow for increased accel off the line
-A_CRUISE_MAX_BP = [0., 15., 25., 40.]
-
+#A_CRUISE_MIN_VALS_TOYOTA = [-0.01, -0.0002, -0.0001,  -0.14, -0.28, -0.30, -0.25, -0.20]
+#A_CRUISE_MIN_BP_TOYOTA =   [0.,    0.01,    0.03,    8.33,  12,    20.,   30.,   55.]
+A_CRUISE_MAX_VALS = [3.5, 3.4, 1.7, 1.12, 0.77, 0.70, 0.58, 0.4,  0.31, 0.084] 
+A_CRUISE_MAX_VALS_FOLLOWING = [3.5, 3.4, 1.7, 1.12, 0.77, 0.70, 0.58, 0.4,  0.31, 0.084]  # Allow for increased accel off the line
+A_CRUISE_MAX_BP = [0.,  3,   6.,  8.,  11., 15.,  20.,  25., 30., 55.]
+#A_CRUISE_MAX_VALS_TOYOTA = [3.5, 3.4, 1.7, 1.12, 0.77, 0.70, 0.58, 0.4,  0.31, 0.084]  # Sets the limits of the planner accel, PID may exceed
+#A_CRUISE_MAX_BP = [0., 15., 25., 40.]
+#A_CRUISE_MAX_BP_TOYOTA =   [0.,  3,   6.,  8.,  11., 15.,  20.,  25., 30., 55.]
+                            
 # Lookup table for turns
 _A_TOTAL_MAX_V = [1.7, 3.2]
 _A_TOTAL_MAX_BP = [20., 40.]
