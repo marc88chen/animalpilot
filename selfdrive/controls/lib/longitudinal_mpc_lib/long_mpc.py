@@ -358,11 +358,6 @@ class LongitudinalMpc():
       self.tr = np.interp(carstate.vEgo, x_vel, y_dist)
       #self.tr = T_FOLLOW
 
-  elif personality==log.LongitudinalPersonality.standard:
-    x_vel =  [0.0,  3.0,  3.01,  8.33,  8.34,  13.89, 13.90,  19.99, 20,    25,   40]
-    y_dist = [1.0,  1.1,  1.2,   1.2,   1.3,   1.3,   1.40,   1.40,  1.45,  1.45, 1.5]
-
-
   def update(self, carstate, radarstate, v_cruise):
     self.update_TF(carstate)
     v_ego = self.x0[1]
