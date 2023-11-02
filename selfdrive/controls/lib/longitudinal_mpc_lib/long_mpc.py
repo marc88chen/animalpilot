@@ -342,13 +342,26 @@ class LongitudinalMpc():
     if carstate.gapAdjustCruiseTr == 1: # Traffic
       # At slow speeds more time, decrease time up to 60mph
       # in mph ~= 5     10   15   20  25     30    35     40  45     50    55     60  65     70    75     80  85     90
-      x_vel = [0, 2.25, 4.5, 6.75, 9, 11.25, 13.5, 15.75, 18, 20.25, 22.5, 24.75, 27, 29.25, 31.5, 33.75, 36, 38.25, 40.5]
-      y_dist = [1.25, 1.24, 1.23, 1.22, 1.21, 1.20, 1.18, 1.16, 1.13, 1.11, 1.09, 1.07, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05]
+      #x_vel = [0, 2.25, 4.5, 6.75, 9, 11.25, 13.5, 15.75, 18, 20.25, 22.5, 24.75, 27, 29.25, 31.5, 33.75, 36, 38.25, 40.5]
+      #y_dist = [1.25, 1.24, 1.23, 1.22, 1.21, 1.20, 1.18, 1.16, 1.13, 1.11, 1.09, 1.07, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05]
+      x_vel =  [0.0,  3.0,  3.01,  8.33,  8.34,  13.89, 13.90,  19.99, 20,    25,   40]
+      y_dist = [0.85, 0.90, 0.93,  0.93,  0.98,  0.98,  1.03,   1.03,  1.10,  1.11, 1.2]      
       self.tr = np.interp(carstate.vEgo, x_vel, y_dist)
     elif carstate.gapAdjustCruiseTr == 2: # Relaxed
-      self.tr = 1.25
+      x_vel =  [0.0,  3.0,  3.01,  8.33,  8.34,  13.89, 13.90,  19.99, 20,    25,   40]
+      y_dist = [1.2,  1.3,  1.40,  1.40,  1.50,  1.50,  1.6,    1.6,   1.85,  1.85, 2.0]
+      self.tr = np.interp(carstate.vEgo, x_vel, y_dist)
+      #self.tr = 1.25
     else:
-      self.tr = T_FOLLOW
+      x_vel =  [0.0,  3.0,  3.01,  8.33,  8.34,  13.89, 13.90,  19.99, 20,    25,   40]
+      y_dist = [1.0,  1.1,  1.2,   1.2,   1.3,   1.3,   1.40,   1.40,  1.45,  1.45, 1.5]
+      self.tr = np.interp(carstate.vEgo, x_vel, y_dist)
+      #self.tr = T_FOLLOW
+
+  elif personality==log.LongitudinalPersonality.standard:
+    x_vel =  [0.0,  3.0,  3.01,  8.33,  8.34,  13.89, 13.90,  19.99, 20,    25,   40]
+    y_dist = [1.0,  1.1,  1.2,   1.2,   1.3,   1.3,   1.40,   1.40,  1.45,  1.45, 1.5]
+
 
   def update(self, carstate, radarstate, v_cruise):
     self.update_TF(carstate)
