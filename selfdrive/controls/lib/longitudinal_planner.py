@@ -19,8 +19,8 @@ from selfdrive.swaglog import cloudlog
 
 LON_MPC_STEP = 0.2  # first step is 0.2s
 #AWARENESS_DECEL = -0.2  # car smoothly decel at .2m/s^2 when user is distracted
-AWARENESS_DECEL =  [-0.01, -0.0002, -0.0001, -0.12, -0.18, -0.28, -0.30, -0.25, -0.20]
-AWARENESS_DECEL_BP = [0.,    0.01,    0.03,  5.6,   8.33,  12,    20.,   30.,   55.]
+AWARENESS_DECEL =  [-0.02, -0.0001, -0.00005, -0.12, -0.18, -0.28, -0.30, -0.25, -0.20]
+AWARENESS_DECEL_BP = [0.,    0.01,    0.02,  5.6,   8.33,  12,    20.,   30.,   55.]
 A_CRUISE_MIN = -1.2
 #A_CRUISE_MIN_VALS_TOYOTA = [-0.01, -0.0002, -0.0001,  -0.14, -0.28, -0.30, -0.25, -0.20]
 #A_CRUISE_MIN_BP_TOYOTA =   [0.,    0.01,    0.03,    8.33,  12,    20.,   30.,   55.]
